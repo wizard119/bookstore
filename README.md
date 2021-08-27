@@ -1,7 +1,4 @@
-# bookstore
-
-
-# Rent the WaterPurifier
+# 인터넷 도서구매 시스템
 
 ## Table of contents
   - [서비스 시나리오](#서비스-시나리오)
