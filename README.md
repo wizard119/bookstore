@@ -103,7 +103,9 @@
        - 고객이 수시로 렌탈/배송현황을 MyPage에서 확인할 수 있어야 한다 -> CQRS</br>
  
 #### 12.Hexagonal Architecture Diagram 도출
- ![image](https://user-images.githubusercontent.com/87048624/130107446-bb0b79eb-220f-4c20-bab2-7901632b7a1d.png)
+ ![image](https://user-images.githubusercontent.com/87114545/131148043-0aea6a80-0d80-41ad-bd00-ce64477f7a35.png)
+
+
 
  
 ## 구현
