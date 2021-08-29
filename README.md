@@ -291,8 +291,27 @@ api:
        execution.isolation.thread.timeoutInMilliseconds: 610
 ```
 
-- 피호출 서비스(결제:payment) 의 임의 부하 처리 - 400 밀리에서 증감 220 밀리 정도 왔다갔다 하게 처리함 
-  ![image](https://user-images.githubusercontent.com/87048624/130067490-0a3c5a7e-9cda-4143-b115-76e5ef9bb8ba.png)
+- 피호출 서비스의 임의 부하 처리 : 400~620 밀리 사이에서 처리하도록 함 (Payment.java)</br>
+```java
+    @PostPersist
+    public void onPostPersist(){
+
+        // circuit breaker start
+         try {
+             Thread.currentThread().sleep((long) (400 + Math.random() * 220));
+         } catch (Exception e) {
+             //TODO: handle exception
+             e.printStackTrace();
+         }
+         circuit breaker end
+
+        PaymentApproved paymentApproved = new PaymentApproved();
+        BeanUtils.copyProperties(this, paymentApproved);
+        paymentApproved.publishAfterCommit();
+    }
+```    
+
+![image](https://user-images.githubusercontent.com/87048624/130067490-0a3c5a7e-9cda-4143-b115-76e5ef9bb8ba.png)
 
 - 서킷 브레이크 적용전
 
