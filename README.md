@@ -14,8 +14,8 @@
     - [서킷 브레이킹](#서킷-브레이킹)  
     - [Polyglot Persistent/Polyglot Programmin](#Polyglot-Persistent-/-Polyglot-Programming)
   - [운영](#운영)
-    - [Deploy Pipeline 설정](#Deploy,-Pipeline-설정)   
-    - [AutoScale Out](#AutoScale-Out)
+    - [Deploy/Pipeline 설정](#Deploy,-Pipeline-설정)   
+    - [HPA](#AutoScale-Out)
     - [무정지 재배포](#무정지-재배포)
     - [Self Healing](#Self-Healing)
     - [ConfigMap](#ConfigMap)
@@ -59,7 +59,7 @@
  
 ## 구현
 - 분석/설계 단계에서 도출된 헥사고날 아키텍처에 따라, 각 BC별로 대변되는 마이크로 서비스들을 Spring Boot와 Java로 구현하였다.</br>
-(각 서비스의 포트넘버는 8081 ~ 808n 이다)</br>
+ (각 마이크로 서비스의 포트 넘버는 8081 ~ 808n 이다)</br>
 ```
 cd order
 mvn spring-boot:run
@@ -80,13 +80,12 @@ mvn spring-boot:run
 ![image](https://user-images.githubusercontent.com/87114545/131244348-352a7bc4-3f1a-4865-99aa-466a85aed7b2.png)
 
 
-- AWS 클라우드의 EKS 서비스 내에 서비스를 모두 빌드한다
+- AWS 클라우드의 EKS 서비스 내에 마이크로 서비스를 모두 빌드한다
 ![image](https://user-images.githubusercontent.com/87048633/130029192-6520c94a-ffe2-4bc3-93c9-3f3d6498bfe1.png)
 ![image](https://user-images.githubusercontent.com/87048633/130029296-b2324bb8-08de-4749-ae77-8e4a9de4cfc5.png)
 
-### DDD의 적용
+### DDD(Domain-Driven-Design)의 적용
 - 각 서비스내에 도출된 핵심 Aggregate Root 객체를 Entity 로 선언하였다. (Order.java)</br>
-  (가능한 현업에서 사용하는 언어 (유비쿼터스 랭귀지)를 그대로 사용)
 ```java
 package com.example.order;
 
@@ -117,7 +116,6 @@ public class Order {
         OrderPlaced orderPlaced = new OrderPlaced();
         BeanUtils.copyProperties(this, orderPlaced);
         orderPlaced.publishAfterCommit();
-
     }
 
     @PreRemove
@@ -125,7 +123,6 @@ public class Order {
         OrderCanceled orderCanceled = new OrderCanceled();
         BeanUtils.copyProperties(this, orderCanceled);
         orderCanceled.publishAfterCommit();
-
     }
 
     public Long getId() {
@@ -223,7 +220,7 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 
 
 ### 비동기식 호출과 Eventual Consistency
-- RentalPlaced -> PaymentApproved -> DeliveryStarted -> ProductDecreased 순서로 Event가 처리됨</br>
+- OrderPlaced -> PaymentApproved -> DeliveryStarted 순서로 Event가 처리됨</br>
  ![image](https://user-images.githubusercontent.com/87048624/130095576-6a139cd6-67c3-4667-ab7d-a4a961114e10.png) </br>
 
 - 결과적 일치 확인</br>
@@ -266,13 +263,13 @@ api:
   ![image](https://user-images.githubusercontent.com/87048624/130095444-62dfc940-cecf-4791-907e-bd0136ce1b25.png)</br>
 
 
-### Gateway
-  - Gateway 서비스 확인</br>
-    1) 서비스 직접 조회</br>   
-    ![image](https://user-images.githubusercontent.com/87048624/130100882-d053b088-2e49-476b-8521-fbe29367e739.png)</br>
+### GateWay
+  - API GateWay를 통하여 마이크로 서비스들의 진입점을 통일할 수 있도록 GateWay를 적용하였다. </br>
+    - 서비스 직접 조회</br>
+   ![image](https://user-images.githubusercontent.com/87048624/130100882-d053b088-2e49-476b-8521-fbe29367e739.png)</br>
    
-    2) Gateway로 조회</br>   
-    ![image](https://user-images.githubusercontent.com/87048624/130166073-6e213177-ceb8-44fa-9b12-8538bfd9b754.png)</br>
+    - Gateway로 조회</br>
+   ![image](https://user-images.githubusercontent.com/87048624/130166073-6e213177-ceb8-44fa-9b12-8538bfd9b754.png)</br>
 
 
 ### 서킷 브레이커
@@ -311,8 +308,6 @@ api:
     }
 ```    
 
-![image](https://user-images.githubusercontent.com/87048624/130067490-0a3c5a7e-9cda-4143-b115-76e5ef9bb8ba.png)
-
 - 서킷 브레이크 적용전
 
   ![image](https://user-images.githubusercontent.com/87048624/130067551-49d8804e-af47-4913-a727-27ec6d01945b.png)
@@ -324,7 +319,8 @@ api:
 
 ### Polyglot Persistent / Polyglot Programming
 - Polyglot Persistent 조건을 만족하기 위해 기존 h2 DB를 hsqldb로 변경하여 동작시킨다. (Order 서비스의 pom.xml)</br>
-![image](https://user-images.githubusercontent.com/87114545/131244510-cb5fd80c-0527-450e-891a-3f20ebd6932c.png)</br>
+![image](https://user-images.githubusercontent.com/87114545/131254432-a3072141-ecba-466a-977c-c88acef2bf76.png)
+
 
 - pom.xml 파일 내 DB 정보 변경 및 재기동</br>
 ![image](https://user-images.githubusercontent.com/87048624/130165475-6efe2537-9941-4e0a-a689-a6de60a8ee67.png)</br>
@@ -340,7 +336,8 @@ api:
 
 ## 운영
 ### Deploy, Pipeline 설정
-- 각 구현체들은 각자의 source repository 에 구성되었고, 사용한 CI/CD 플랫폼은 aws codebuild를 사용하였으며, pipeline build script 는 각 프로젝트 폴더 이하에 buildspec.yml 에 포함되었다.
+- 각 구현체들은 각자의 source repository 에 구성되었고, 사용한 CI/CD 플랫폼은 aws codebuild를 사용하였으며,</br>
+  pipeline build script 는 각 프로젝트 폴더 이하에 buildspec.yml 에 포함되었다.</br>
   ![image](https://user-images.githubusercontent.com/87048633/130006493-f79b40dc-242d-4684-95eb-e4a305abb6ef.png)
   ![image](https://user-images.githubusercontent.com/87048633/130006762-19c4648c-0e27-461b-897f-59aeeddb2bc6.png)
   ![image](https://user-images.githubusercontent.com/87048633/130007397-522fdd2e-cd61-4364-86b4-276afff0248d.png)
@@ -348,16 +345,19 @@ api:
   
 
 
-### AutoScale Out
-- replica를 동적으로 늘려서 HPA를 설정한다.</br>
-- 시스템을 안정되게 운영할 수 있게 해줬지만 사용자의 요청을 100% 받아들여주지 못했기 때문에 이에 대한 보완책으로 자동화된 확장 기능을 적용하고자 한다.</br>
-- 렌탈 신청 서비스에 대한 replica 를 동적으로 늘려주도록 HPA 를 설정한다.</br>
-- 렌탈 서비스의 buildspec.yaml에 resource 설정을 추가한다. </br>
- ![image](https://user-images.githubusercontent.com/87048624/130164837-cbf48e01-6f6f-4fea-99a1-84e0fce444a1.png)
+### HPA (Horizontal Pod Autoscaler)
+- 자동화된 확장 기능 적용을 위해 주문 서비스 buildspec.yaml에 resource 설정 추가 (CPU 최대/최소값 설정)</br>
+```java
+          resources:
+            limits:
+              cpu: 500m 
+            requests:
+              cpu: 200m
+```
 
 - 오토스케일링 설정 (해당 deployment 컨테이너의 최대값/최소값 설정)
 ```
-  >kubectl autoscale deployment user5-rental --cpu-percent=50 --min=1 --max=10   
+  kubectl autoscale deployment user5-rental --cpu-percent=50 --min=1 --max=10   
 ``` 
 - 워크로드를 110명, 30초 동안 부하를 걸어준다.</br>
  ![image](https://user-images.githubusercontent.com/87048624/130164937-5be87dce-e3dd-4f3e-b1cd-aa02610c13de.png)</br>
