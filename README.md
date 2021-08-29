@@ -425,7 +425,7 @@ api:
 
  - 생성전 배포후 rental pod 수행안함 </br>
   ![image](https://user-images.githubusercontent.com/87048624/130183020-1a521507-f678-4ba3-b0ee-4d21c0edeeed.png)</br>
- - configMap 생성</br> 
+ - configMap 생성
   ```
    kubectl create configmap bookstore_cm --from-literal=config_url=http://payment:8082
   ``` 
