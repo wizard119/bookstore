@@ -77,7 +77,7 @@ cd gateway
 mvn spring-boot:run
 
 ```
-![image](https://user-images.githubusercontent.com/87114545/131240695-698e776a-a954-4cb3-940d-b930f3636280.png)
+![image](https://user-images.githubusercontent.com/87114545/131242147-37c956fa-6db0-41aa-ae04-956693b4fe71.png)
 
 
 - AWS 클라우드의 EKS 서비스 내에 서비스를 모두 빌드한다
