@@ -253,7 +253,7 @@ public interface PaymentService {
     public void startPayment(Payment payment);
 }
 ```
-- Order 서비스의 application.yaml
+ - Order 서비스의 application.yaml
 ```java
 api:
   url:
@@ -384,27 +384,51 @@ api:
 
  
  
-### Self-Healing
+### Self-Healing (Liveness probe)
 - Liveness probe 를 통해 Pod의 상태를 체크하다가, Pod의 상태가 비정상인경우 재시작한다. 
-  - rental 서비스 yaml파일에 Liveness probe 설정을 한다. </br>  
-   . /tmp/test 파일이 존재하는지,  5초(periodSeconds 파라미터 값)마다 확인</br>
-  - 파일이 존재하지 않을 경우, 정상 작동에 문제가 있다고 판단되어 자동으로 컨테이너가 재시작</br>
-    ![image](https://user-images.githubusercontent.com/87048624/130088840-997e5103-14f7-47c0-8148-b2f1d7de99d1.png)
+- Order 서비스 yaml파일에 Liveness probe 설정을 한다.</br>
+  /tmp/healthy 파일이 존재하는지 주기적 확인 후 비정상(파일 미존재) 판단시 자동으로 재시작)</br>
+    
+```java    
+    containers:
+      - name: $_PROJECT_NAME
+        image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$_PROJECT_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
+        ports:
+          - containerPort: 8080
+        args:           
+          - /bin/sh     
+          - -c          
+          - touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600
+        ...  
+        ...  
+        livenessProbe:
+          exec: 
+            command: 
+            - cat    
+            - /tmp/healthy
+          initialDelaySeconds: 5
+          periodSeconds: 5
+```
 
   - 해당 pod가 재시작하는걸 확인한다.   
     ![image](https://user-images.githubusercontent.com/87048624/130086524-d479788b-1023-4a95-906d-dad1a9cef1e5.png) 
     ![image](https://user-images.githubusercontent.com/87048624/130086552-2c59944d-6f71-4332-8c82-1ce5eff50a85.png)</br>
 
 ### ConfigMap 
- - rental 서비스의 application.yaml 소스 반영부분 </br>
-  ![image](https://user-images.githubusercontent.com/87048624/130183052-707ce480-fd57-4cf3-beee-d4db5c3a77e4.png)</br>
+ - 변경 가능성이 있는 설정을 ConfigMap을 사용하여 관리
+ - order 서비스에서 호출하는 payment 서비스 url 일부분을 ConfigMap 사용하여 구현 (order 서비스의 application.yaml)</br>
+```java
+  api:
+    url:
+      payment: ${config_url}
+```
 
  - 생성전 배포후 rental pod 수행안함 </br>
   ![image](https://user-images.githubusercontent.com/87048624/130183020-1a521507-f678-4ba3-b0ee-4d21c0edeeed.png)</br>
  - configMap 생성</br> 
   ```
-   >kubectl create configmap apiurl --from-literal=url=http://payment:8080
+   kubectl create configmap bookstore_cm --from-literal=config_url=http://payment:8082
   ``` 
- - rental pod 수행</br>
+ - order pod 수행</br>
   ![image](https://user-images.githubusercontent.com/87048624/130183035-b4872b21-8678-4757-84b4-416e1736f19e.png)</br>
 
