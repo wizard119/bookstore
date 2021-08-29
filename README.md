@@ -59,7 +59,7 @@
  
 ## 구현
 - 분석/설계 단계에서 도출된 헥사고날 아키텍처에 따라, 각 BC별로 대변되는 마이크로 서비스들을 Spring Boot와 Java로 구현하였다.</br>
-(각자의 포트넘버는 8081 ~ 808n 이다)</br></br>
+(각 서비스의 포트넘버는 8081 ~ 808n 이다)</br>
 ```
 cd order
 mvn spring-boot:run
@@ -77,7 +77,7 @@ cd gateway
 mvn spring-boot:run
 
 ```
-![image](https://user-images.githubusercontent.com/87114545/131242147-37c956fa-6db0-41aa-ae04-956693b4fe71.png)
+![image](https://user-images.githubusercontent.com/87114545/131244348-352a7bc4-3f1a-4865-99aa-466a85aed7b2.png)
 
 
 - AWS 클라우드의 EKS 서비스 내에 서비스를 모두 빌드한다
@@ -85,9 +85,8 @@ mvn spring-boot:run
 ![image](https://user-images.githubusercontent.com/87048633/130029296-b2324bb8-08de-4749-ae77-8e4a9de4cfc5.png)
 
 ### DDD의 적용
-- 각 서비스내에 도출된 핵심 Aggregate Root 객체를 Entity 로 선언하였다. </br>
+- 각 서비스내에 도출된 핵심 Aggregate Root 객체를 Entity 로 선언하였다. (Order.java)</br>
   (가능한 현업에서 사용하는 언어 (유비쿼터스 랭귀지)를 그대로 사용)
-- Order 서비스 (Order.java)
 ```java
 package com.example.order;
 
@@ -180,7 +179,7 @@ public class Order {
 }
 ```
 - Entity Pattern 과 Repository Pattern 을 적용하여 JPA 를 통하여 다양한 데이터소스 유형에 대한 별도의 처리가 없도록 </br>
-  데이터 접근 어댑터를 자동 생성하기 위하여 Spring Data REST 의 RestRepository 를 적용하였다.
+  데이터 접근 어댑터를 자동 생성하기 위하여 Spring Data REST 의 RestRepository 를 적용하였다. (OrderRepository.java)
 ```java
 package com.example.order;
 
@@ -195,7 +194,7 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 ### Saga
 - 적용 후 REST API 의 테스트</br>
 
-  - 주문</br>
+  - 주문 등록</br>
     ![image](https://user-images.githubusercontent.com/87048624/130166446-f4f4696d-719c-434b-8793-e41a801e051b.png)</br>
 
   - 주문 확인</br>
@@ -246,14 +245,25 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 
 
 ### 동기식 호출
-- 분석단계에서의 조건 중 하나로 렌탈(rental) -> 결제(Payment)간의 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리하기로 하였다.
-- 호출 프로토콜은 이미 앞서 Rest Repository 에 의해 노출되어있는 REST 서비스를 FeignClient 를 이용하여 호출하도록 한다. 
-  - rental서비스 내부의 payment 서비스</br> 
- ![image](https://user-images.githubusercontent.com/87048624/130165134-0539dc96-5779-410c-ac46-f16f1ade7658.png)</br> 
-  - payment micro 서비스를 연동하기위한 rental 서비스의 application.yaml 파일</br>   
- ![image](https://user-images.githubusercontent.com/87048624/130165157-e4028d4c-6ecd-44aa-b21f-d52a1bfecd6a.png)</br> 
-  - 동기식 호출 후 payment 서비스 처리결과</br> 
- ![image](https://user-images.githubusercontent.com/87048624/130095444-62dfc940-cecf-4791-907e-bd0136ce1b25.png)</br> 
+- 구현 필수 요건 중 주문(Order) -> 결제(Payment)간 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리하기로 하였다.
+- 호출 프로토콜은 이미 앞서 Rest Repository에 의해 노출되어있는 REST 서비스를 FeignClient를 이용하여 호출하도록 한다.</br></br>
+- Order 서비스 내부의 payment 서비스
+```java
+@FeignClient(name ="payment", url="${api.url.payment}")
+public interface PaymentService {
+    
+    @RequestMapping(method = RequestMethod.POST, value = "/payments", consumes = "application/json")
+    public void startPayment(Payment payment);
+}
+```
+- Order 서비스의 application.yaml
+```java
+api:
+  url:
+    payment: http://localhost:8082
+```
+- 동기식 호출 후 payment 서비스 처리결과</br> 
+  ![image](https://user-images.githubusercontent.com/87048624/130095444-62dfc940-cecf-4791-907e-bd0136ce1b25.png)</br>
 
 
 ### Gateway
@@ -265,10 +275,21 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
     ![image](https://user-images.githubusercontent.com/87048624/130166073-6e213177-ceb8-44fa-9b12-8538bfd9b754.png)</br>
 
 
-### 서킷 브레이킹
-- 서킷 브레이킹 프레임워크의 선택: FeignClient + hystrix </br>
-- Hystrix 를 설정: 요청처리 쓰레드에서 처리시간이 610 밀리가 넘어서기 시작하여 어느정도 유지되면 Circuit Breaker 회로가 닫히도록 설정</br>
-  ![image](https://user-images.githubusercontent.com/87048624/130067453-789251b4-e84a-4036-a1f6-2fd1154d8203.png)
+### 서킷 브레이커
+- 서킷 브레이킹 프레임워크의 선택 (FeignClient + hystrix) </br>
+- 요청처리 쓰레드에서 임계치 (610 Milliseconds) 이내로 Respons가 내려오지 않으면</br>
+  서킷브레이커가 작동하도록 설정 (Order서비스의 application.yml)</br>
+```java
+ feign:
+   hystrix:
+     enabled: true
+
+ hystrix:
+   command:
+     # 전역설정
+     default:
+       execution.isolation.thread.timeoutInMilliseconds: 610
+```
 
 - 피호출 서비스(결제:payment) 의 임의 부하 처리 - 400 밀리에서 증감 220 밀리 정도 왔다갔다 하게 처리함 
   ![image](https://user-images.githubusercontent.com/87048624/130067490-0a3c5a7e-9cda-4143-b115-76e5ef9bb8ba.png)
@@ -283,24 +304,8 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 
 
 ### Polyglot Persistent / Polyglot Programming
-- Polyglot Persistent 조건을 만족하기 위해 기존 h2 DB를 hsqldb로 변경하여 동작시킨다.
-```
-<!--
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		-->
-
-		<!-- polyglot start -->
-		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<!-- polyglot end -->
-```
+- Polyglot Persistent 조건을 만족하기 위해 기존 h2 DB를 hsqldb로 변경하여 동작시킨다. (Order 서비스의 pom.xml)</br>
+![image](https://user-images.githubusercontent.com/87114545/131244510-cb5fd80c-0527-450e-891a-3f20ebd6932c.png)</br>
 
 - pom.xml 파일 내 DB 정보 변경 및 재기동</br>
 ![image](https://user-images.githubusercontent.com/87048624/130165475-6efe2537-9941-4e0a-a689-a6de60a8ee67.png)</br>
