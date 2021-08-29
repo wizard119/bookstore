@@ -52,7 +52,7 @@
  ![image](https://user-images.githubusercontent.com/87114545/131238869-98960f77-6d37-4000-bb05-45f77c18d9e9.png)
  
 #### Hexagonal Architecture Diagram 도출
- ![image](https://user-images.githubusercontent.com/87114545/131148043-0aea6a80-0d80-41ad-bd00-ce64477f7a35.png) 
+ ![image](https://user-images.githubusercontent.com/87114545/131242875-445b806b-bf91-42f4-956d-d84fdb51ca0d.png)
 
 
 </br>
