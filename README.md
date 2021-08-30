@@ -49,8 +49,26 @@
     
 
 #### 완성된 모형
- ![image](https://user-images.githubusercontent.com/87114545/131238869-98960f77-6d37-4000-bb05-45f77c18d9e9.png)
- 
+ ![image](https://user-images.githubusercontent.com/87114545/131238869-98960f77-6d37-4000-bb05-45f77c18d9e9.png)</br>
+#### 1. 기능적 요구사항 검증
+ ![image](https://user-images.githubusercontent.com/87114545/131307907-7885d95e-3a23-4ef5-8062-e7388b6b0908.png)
+```   
+  1) 고객이 도서메뉴를 선택하여 주문하고, 구매비용을 결제하면 도서배송을 시작한다 (O)
+  2) 고객이 주문을 취소하면, 결제가 취소되고, 배송이 취소된다 (O)
+  3) 고객은 언제든지 주문/배송현황을 조회한다 (O)
+```  
+#### 2. 비기능적 요구사항 검증
+ ![image](https://user-images.githubusercontent.com/87114545/131309204-79249468-e647-42bd-a9da-1cd327b4da0c.png)
+```   
+  1) 트랜잭션 (O)
+   - 도서비 결제가 완료 되어야만 주문 신청을 완료할 수 있다 (Req/Res 방식, Sync 호출)
+  2) 장애격리 (O)
+   - 배송기능이 수행되지 않더라도 주문은 365일/24시간 받을 수 있어야 한다 (Pub/Sub 방식, Async 호출, Eventual Consistency)
+   - 결제시스템이 과중되면 도서주문을 잠시동안 받지 않고, 잠시 후에 결제하도록 유도한다 (Circuit breaker 적용)
+  3) 성능 (O)
+   - 고객이 수시로 주문/배송현황을 MyPage에서 확인할 수 있어야 한다 (CQRS 구현)
+``` 
+
 #### Hexagonal Architecture Diagram 도출
  ![image](https://user-images.githubusercontent.com/87114545/131242875-445b806b-bf91-42f4-956d-d84fdb51ca0d.png)
 
