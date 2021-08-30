@@ -51,7 +51,7 @@
 #### 완성된 모형
  ![image](https://user-images.githubusercontent.com/87114545/131238869-98960f77-6d37-4000-bb05-45f77c18d9e9.png)</br>
 #### 1. 기능적 요구사항 검증
- ![image](https://user-images.githubusercontent.com/87114545/131307907-7885d95e-3a23-4ef5-8062-e7388b6b0908.png)
+ ![image](https://user-images.githubusercontent.com/87114545/131314017-ed56dd00-8e01-4c7f-97d2-4d931a1a270a.png)
 ```   
   1) 고객이 도서메뉴를 선택하여 주문하고, 구매비용을 결제하면 도서배송을 시작한다 (O)
   2) 고객이 주문을 취소하면, 결제가 취소되고, 배송이 취소된다 (O)
