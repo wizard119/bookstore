@@ -194,7 +194,7 @@ public class Order {
 }
 ```
 - Entity Pattern 과 Repository Pattern 을 적용하여 JPA 를 통하여 다양한 데이터소스 유형에 대한 별도의 처리가 없도록 </br>
-  데이터 접근 어댑터를 자동 생성하기 위하여 Spring Data REST 의 RestRepository 를 적용하였다. (OrderRepository.java)
+  데이터 접근 어댑터를 자동생성하기 위하여 Spring Data REST 의 RestRepository 를 적용하였다. (OrderRepository.java)
 ```java
 package com.example.order;
 
@@ -227,7 +227,7 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
   - 주문 취소</br> 
     ![image](https://user-images.githubusercontent.com/87048624/130167484-d6733c1b-153a-4a55-a1ae-fd2b38209187.png)</br>
    
-  - 렌탈 취소 확인</br>  
+  - 주문 취소 확인</br>  
     ![image](https://user-images.githubusercontent.com/87048624/130167567-033529f9-6d59-428d-84c0-63974b32fae8.png)</br>
 
   - 결제 취소 확인</br>  
@@ -246,13 +246,13 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 
 
 ### CQRS
-  - My Page에서 렌탈 신청 여부/결제성공여부/배송상태확인 (CQRS)</br>    
-    : mypage 조회시rentalPlaced 이벤트까지만 수신내역 확인, 모든 이벤트 수신내역 확인</br>      
+  - My Page에서 주문/결제/배송 상태 확인 (CQRS)</br>    
+    : mypage 조회시OrderPlaced 이벤트까지만 수신내역 확인, 모든 이벤트 수신내역 확인</br>      
      ![image](https://user-images.githubusercontent.com/87048624/130083651-18549595-ec82-4bca-a5e7-3d23952872dc.png)</br>
 
 
 ### Correlation 
-  - RentalCanceled 이벤트 발생</br> 
+  - OrderCanceled 이벤트 발생</br> 
   ![image](https://user-images.githubusercontent.com/87048624/130172126-56738d8c-2968-4728-a32c-88af68eb7416.png)</br> 
 
   - CorrelationId로 찾아서 삭제</br> 
@@ -260,9 +260,9 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 
 
 ### 동기식 호출
-- 구현 필수 요건 중 주문(Order) -> 결제(Payment)간 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리하기로 하였다.
+- 구현 필수 요건 중 주문(Order)-> 결제(Payment)간 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리하기로 하였다.
 - 호출 프로토콜은 이미 앞서 Rest Repository에 의해 노출되어있는 REST 서비스를 FeignClient를 이용하여 호출하도록 한다.</br></br>
-- Order 서비스 내부의 payment 서비스
+- Order서비스 내부의 payment서비스
 ```java
 @FeignClient(name ="payment", url="${api.url.payment}")
 public interface PaymentService {
@@ -271,13 +271,13 @@ public interface PaymentService {
     public void startPayment(Payment payment);
 }
 ```
- - Order 서비스의 application.yaml
+ - Order서비스의 application.yaml
 ```java
 api:
   url:
     payment: http://localhost:8082
 ```
-- 동기식 호출 후 payment 서비스 처리결과</br> 
+- 동기식 호출 후 payment서비스 처리결과</br> 
   ![image](https://user-images.githubusercontent.com/87048624/130095444-62dfc940-cecf-4791-907e-bd0136ce1b25.png)</br>
 
 
@@ -286,13 +286,13 @@ api:
     - 서비스 직접 조회</br>
    ![image](https://user-images.githubusercontent.com/87048624/130100882-d053b088-2e49-476b-8521-fbe29367e739.png)</br>
    
-    - Gateway로 조회</br>
+    - Gateway를 경유해서 조회</br>
    ![image](https://user-images.githubusercontent.com/87048624/130166073-6e213177-ceb8-44fa-9b12-8538bfd9b754.png)</br>
 
 
 ### 서킷 브레이커
 - 서킷 브레이킹 프레임워크의 선택 (FeignClient + hystrix) </br>
-- 요청처리 쓰레드에서 임계치 (610 Milliseconds) 이내로 Respons가 내려오지 않으면</br>
+- 요청처리 쓰레드에서 임계치 (610 Milliseconds) 이내로 Response가 내려오지 않으면</br>
   서킷브레이커가 작동하도록 설정 (Order서비스의 application.yml)</br>
 ```java
  feign:
@@ -336,7 +336,7 @@ api:
 
 
 ### Polyglot Persistent / Polyglot Programming
-- Polyglot Persistent 조건을 만족하기 위해 기존 h2 DB를 hsqldb로 변경하여 동작시킨다. (Order 서비스의 pom.xml)</br>
+- Polyglot Persistent 조건을 만족하기 위해 기존 h2 DB를 hsqldb로 변경하여 동작시킨다. (Order서비스의 pom.xml)</br>
 ![image](https://user-images.githubusercontent.com/87114545/131254432-a3072141-ecba-466a-977c-c88acef2bf76.png)
 
 
@@ -344,9 +344,9 @@ api:
 ![image](https://user-images.githubusercontent.com/87048624/130165475-6efe2537-9941-4e0a-a689-a6de60a8ee67.png)</br>
 - rental 서비스 재기동 후 DB에 데이터 없는 상태</br>
  ![image](https://user-images.githubusercontent.com/87048624/130172977-b3fc6202-4f63-4345-9156-d6d579aab07d.png)</br>
-- rentalPlaced 정상 처리</br>
+- OrderPlaced 정상 처리</br>
  ![image](https://user-images.githubusercontent.com/87048624/130173106-ba3f9f19-7be4-4d9a-b192-7ba4fb433433.png)</br>
-- Pub/sub 결과도 정상</br>
+- Pub/Sub 결과도 정상</br>
  ![image](https://user-images.githubusercontent.com/87048624/130173152-57344c97-1f09-4aa6-b133-dc7a1961816f.png)</br>
 
 
@@ -364,7 +364,7 @@ api:
 
 
 ### HPA (Horizontal Pod Autoscaler)
-- 자동화된 확장 기능 적용을 위해 주문 서비스 buildspec.yaml에 resource 설정 추가 (CPU 최대/최소값 설정)</br>
+- 자동화된 확장 기능 적용을 위해 order서비스 buildspec.yml에 resource 설정 추가 (CPU 최대/최소값 설정)</br>
 ```java
           resources:
             limits:
@@ -390,7 +390,7 @@ api:
 
 
 ### 무정지 재배포
-- readiness probe 를 통해 이후 서비스가 활성 상태가 되면 유입을 진행시킨다.</br> 
+- readiness probe를 통해 이후 서비스가 활성 상태가 되면 유입을 진행시킨다.</br> 
 - 주석처리하여 v2 배포</br> 
  ![image](https://user-images.githubusercontent.com/87048624/130180233-576fdee7-ab33-488f-a092-7bd29876b542.png)</br>
 - siege -c10 -t150S -v http://user5-rental 부하 후 readiness 주석 삭제 후 배포 하여 Availablility 100% 이하 확인</br>
@@ -403,8 +403,8 @@ api:
  
  
 ### Self-Healing (Liveness probe)
-- Liveness probe 를 통해 Pod의 상태를 체크하다가, Pod의 상태가 비정상인경우 재시작한다. 
-- Order 서비스 yaml파일에 Liveness probe 설정을 한다.</br>
+- Liveness probe를 통해 Pod의 상태를 체크하다가, Pod의 상태가 비정상인경우 재시작한다. 
+- Liveness probe 관련 설정 (order서비스의 buildspec.yml) </br>
   /tmp/healthy 파일이 존재하는지 주기적 확인 후 비정상(파일 미존재) 판단시 자동으로 재시작)</br>
     
 ```java    
@@ -434,7 +434,7 @@ api:
 
 ### ConfigMap
  - 변경 가능성이 있는 설정을 ConfigMap을 사용하여 관리
- - order 서비스에서 호출하는 payment 서비스 url 일부분을 ConfigMap 사용하여 구현 (order서비스의 application.yml)</br>
+ - order서비스에서 호출하는 payment서비스 url 일부분을 ConfigMap 사용하여 구현 (order서비스의 application.yml)</br>
 ```java
     # api:
     #   url:
@@ -444,7 +444,7 @@ api:
       url:
         payment: ${configurl}
 ```
- - ConfigMap 정의 (Order서비스의 Buildspec.yml)</br>
+ - ConfigMap 정의 (Order서비스의 buildspec.yml)</br>
 ```java 
      env:
        - name: port-list     
@@ -457,7 +457,7 @@ api:
   ```
    kubectl apply configmap bookstore-cm --from-literal=configurl=http://localhost:8082
   ``` 
- - 생성전 배포후 rental pod 수행안함 </br>
+ - 생성전 배포후 order pod 수행안함 </br>
   ![image](https://user-images.githubusercontent.com/87048624/130183020-1a521507-f678-4ba3-b0ee-4d21c0edeeed.png)</br>
  - order pod 수행</br>
   ![image](https://user-images.githubusercontent.com/87048624/130183035-b4872b21-8678-4757-84b4-416e1736f19e.png)</br>
