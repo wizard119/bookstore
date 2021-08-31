@@ -4,40 +4,40 @@
   - [서비스 시나리오](#서비스-시나리오)
   - [분석/설계](#분석설계)
   - [구현](#구현)
-    - [DDD의 적용](#DDD의-적용)
+    - [DDD의 적용](#DDD(Domain-Driven-Design)의-적용)
     - [Saga](#Saga)
     - [비동기식 호출과 Eventual Consistency](#비동기식-호출과-Eventual-Consistency)
     - [CQRS](#CQRS)
     - [Correlation](#Correlation)
     - [동기식 호출](#동기식-호출)
-    - [Gateway](#Gateway)
-    - [서킷 브레이킹](#서킷-브레이킹)  
+    - [GateWay](#GateWay)
+    - [서킷 브레이커](#서킷-브레이커)  
     - [Polyglot Persistent/Polyglot Programmin](#Polyglot-Persistent-/-Polyglot-Programming)
   - [운영](#운영)
-    - [Deploy/Pipeline 설정](#Deploy,-Pipeline-설정)   
-    - [HPA](#AutoScale-Out)
+    - [Deploy/Pipeline 설정](#DeployPipeline-설정)   
+    - [HPA](#HPA-(Horizontal Pod Autoscaler))
     - [무정지 재배포](#무정지-재배포)
-    - [Self Healing](#Self-Healing)
+    - [Self Healing](#Self-Healing (Liveness probe))
     - [ConfigMap](#ConfigMap)
 
 ## 서비스 시나리오
     [기능적 요구사항]
-        1. 고객이 도서메뉴를 선택하여 주문한다
-        2. 고객은 주문한 도서의 구매비용을 결제한다
-        3. 결제가 완료되면 도서배송을 시작한다
-        4. 고객은 도서주문을 취소 할 수 있다
-        5. 도서주문이 취소되면 결제가 취소된다
-        6. 결제가 취소되면 배송이 취소된다
-        7. 고객은 언제든지 주문/배송현황을 조회한다 (CQRS-View) 
+    1. 고객이 도서메뉴를 선택하여 주문한다
+    2. 고객은 주문한 도서의 구매비용을 결제한다
+    3. 결제가 완료되면 도서배송을 시작한다
+    4. 고객은 도서주문을 취소 할 수 있다
+    5. 도서주문이 취소되면 결제가 취소된다
+    6. 결제가 취소되면 배송이 취소된다
+    7. 고객은 언제든지 주문/배송현황을 조회한다 (CQRS-View) 
 
     [비기능적 요구사항]
-        1. 트랜잭션 
-          - 도서비 결제가 완료 되어야만 주문 신청을 완료할 수 있다 -> Sync 호출
-        2. 장애격리
-          - 배송관리 기능이 수행되지 않더라도 주문은 365일 24시간 받을 수 있어야 한다 -> Async(event-driven),Eventual Consistency
-          - 결제시스템이 과중되면 도서주문을 잠시동안 받지 않고, 잠시 후에  결제하도록 유도한다 -> Circuit breaker,fallback
-        3. 성능
-          - 고객은 언제든지 주문/배송현황을 MyPage에서 확인할 수 있어야 한다 -> CQRS
+    1. 트랜잭션 
+     - 도서비 결제가 완료 되어야만 주문 신청을 완료할 수 있다-> Sync 호출
+    2. 장애격리
+     - 배송관리 기능이 수행되지 않더라도 주문은 365일 24시간 받을 수 있어야 한다-> Async(event-driven),Eventual Consistency
+     - 결제시스템이 과중되면 도서주문을 잠시동안 받지 않고, 잠시 후에  결제하도록 유도한다-> Circuit breaker
+    3. 성능
+     - 고객은 언제든지 주문/배송현황을 MyPage에서 확인할 수 있어야 한다-> CQRS
 
 ## 분석/설계
 ### Event Storming 결과
@@ -61,9 +61,9 @@
  ![image](https://user-images.githubusercontent.com/87114545/131309204-79249468-e647-42bd-a9da-1cd327b4da0c.png)
 ```   
   1) 트랜잭션 (O)
-   - 도서비 결제가 완료 되어야만 주문 신청을 완료할 수 있다 (Req/Res 방식, Sync 호출)
+   - 도서비 결제가 완료 되어야만 주문 신청을 완료할 수 있다 (Req/Res 방식, Sync호출)
   2) 장애격리 (O)
-   - 배송기능이 수행되지 않더라도 주문은 365일/24시간 받을 수 있어야 한다 (Pub/Sub 방식, Async 호출, Eventual Consistency)
+   - 배송기능이 수행되지 않더라도 주문은 365일/24시간 받을 수 있어야 한다 (Pub/Sub 방식, Async호출, Eventual Consistency)
    - 결제시스템이 과중되면 도서주문을 잠시동안 받지 않고, 잠시 후에 결제하도록 유도한다 (Circuit breaker 적용)
   3) 성능 (O)
    - 고객이 수시로 주문/배송현황을 MyPage에서 확인할 수 있어야 한다 (CQRS 구현)
@@ -432,7 +432,7 @@ api:
     ![image](https://user-images.githubusercontent.com/87048624/130086524-d479788b-1023-4a95-906d-dad1a9cef1e5.png) 
     ![image](https://user-images.githubusercontent.com/87048624/130086552-2c59944d-6f71-4332-8c82-1ce5eff50a85.png)</br>
 
-### ConfigMap 
+### ConfigMap
  - 변경 가능성이 있는 설정을 ConfigMap을 사용하여 관리
  - order 서비스에서 호출하는 payment 서비스 url 일부분을 ConfigMap 사용하여 구현 (order서비스의 application.yml)</br>
 ```java
