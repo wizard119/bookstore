@@ -4,7 +4,7 @@
   - [서비스 시나리오](#서비스-시나리오)
   - [분석/설계](#분석설계)
   - [구현](#구현)
-    - [DDD의 적용](#DDD의)
+    - [DDD의 적용](#DDD(Domain-Driven-Design)의-적용)
     - [Saga](#Saga)
     - [비동기식 호출과 Eventual Consistency](#비동기식-호출과-Eventual-Consistency)
     - [CQRS](#CQRS)
@@ -453,13 +453,12 @@ api:
              name: bookstore-cm 
              key: config_url     
 ```
-
- - 생성전 배포후 rental pod 수행안함 </br>
-  ![image](https://user-images.githubusercontent.com/87048624/130183020-1a521507-f678-4ba3-b0ee-4d21c0edeeed.png)</br>
  - configMap 생성
   ```
-   kubectl create configmap bookstore_cm --from-literal=config_url=http://payment:8082
+   kubectl apply configmap bookstore-cm --from-literal=configurl=http://localhost:8082
   ``` 
+ - 생성전 배포후 rental pod 수행안함 </br>
+  ![image](https://user-images.githubusercontent.com/87048624/130183020-1a521507-f678-4ba3-b0ee-4d21c0edeeed.png)</br>
  - order pod 수행</br>
   ![image](https://user-images.githubusercontent.com/87048624/130183035-b4872b21-8678-4757-84b4-416e1736f19e.png)</br>
 
