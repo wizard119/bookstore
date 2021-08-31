@@ -434,11 +434,24 @@ api:
 
 ### ConfigMap 
  - 변경 가능성이 있는 설정을 ConfigMap을 사용하여 관리
- - order 서비스에서 호출하는 payment 서비스 url 일부분을 ConfigMap 사용하여 구현 (order 서비스의 application.yaml)</br>
+ - order 서비스에서 호출하는 payment 서비스 url 일부분을 ConfigMap 사용하여 구현 (order서비스의 application.yml)</br>
 ```java
-  api:
-    url:
-      payment: ${config_url}
+#api:
+#  url:
+#    payment: http://localhost:8082
+
+api:
+  url:
+    payment: ${configurl}
+```
+ - ConfigMap 정의 (Order서비스의 Buildspec.yml)</br>
+```java 
+             env:
+               - name: port-list     #configmap
+                 valueFrom:          #configmap
+                   configMapKeyRef:  #configmap
+                     name: port-list #configmap
+                     key: port2      #configmap
 ```
 
  - 생성전 배포후 rental pod 수행안함 </br>
