@@ -17,7 +17,7 @@
     - [Deploy/Pipeline 설정](#DeployPipeline-설정)   
     - [HPA](#HPA-(Horizontal-Pod-Autoscaler))
     - [무정지 재배포](#무정지-재배포)
-    - [Self-Healing](#Self-Healing)
+    - [Self-Healing](#Self-Healing-(Liveness probe))
     - [ConfigMap](#ConfigMap)
 
 ## 서비스 시나리오
