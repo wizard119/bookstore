@@ -4,7 +4,7 @@
   - [서비스 시나리오](#서비스-시나리오)
   - [분석/설계](#분석설계)
   - [구현](#구현)
-    - [DDD의 적용](#DDD(Domain-Driven-Design)의-적용)
+    - [DDD의 적용](#DDD(DomainDrivenDesign)의-적용)
     - [Saga](#Saga)
     - [비동기식 호출과 Eventual Consistency](#비동기식-호출과-Eventual-Consistency)
     - [CQRS](#CQRS)
@@ -17,7 +17,7 @@
     - [Deploy/Pipeline 설정](#DeployPipeline-설정)   
     - [HPA](#HPA-(Horizontal-Pod-Autoscaler))
     - [무정지 재배포](#무정지-재배포)
-    - [Self-Healing](#Self-Healing-(Liveness probe))
+    - [Self-Healing](#SelfHealing-(Liveness probe))
     - [ConfigMap](#ConfigMap)
 
 ## 서비스 시나리오
