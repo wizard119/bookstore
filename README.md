@@ -282,7 +282,7 @@ api:
 
 
 ### GateWay
-  - API GateWay를 통하여 마이크로 서비스들의 진입점을 통일할 수 있도록 GateWay를 적용하였다. </br>
+  - API GateWay를 통하여 마이크로 서비스들의 진입점을 통일할 수 있도록 구현하였다. </br>
     - 서비스 직접 조회</br>
    ![image](https://user-images.githubusercontent.com/87048624/130100882-d053b088-2e49-476b-8521-fbe29367e739.png)</br>
    
