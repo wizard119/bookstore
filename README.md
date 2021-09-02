@@ -14,7 +14,7 @@
     - [서킷 브레이커](#서킷-브레이커)  
     - [Polyglot Persistent/Polyglot Programming](#Polyglot-Persistent--Polyglot-Programming)
   - [운영](#운영)
-    - [Deploy/Pipeline 설정](#DeployPipeline-설정)   
+    - [Pipeline](#Pipeline)   
     - [HPA](#HPA-(Horizontal-Pod-Autoscaler))
     - [무정지 재배포](#무정지-재배포)
     - [Self-Healing](#Self-Healing-(Liveness-probe))
@@ -100,8 +100,7 @@ mvn spring-boot:run
 
 
 - AWS 클라우드의 EKS 서비스 내에 마이크로 서비스를 모두 빌드한다
-![image](https://user-images.githubusercontent.com/87048633/130029192-6520c94a-ffe2-4bc3-93c9-3f3d6498bfe1.png)
-![image](https://user-images.githubusercontent.com/87048633/130029296-b2324bb8-08de-4749-ae77-8e4a9de4cfc5.png)
+![image](https://user-images.githubusercontent.com/87114545/131857119-c4e668f7-9d9e-48af-ad55-9ec0553b26db.png)
 
 ### DDD(Domain-Driven-Design)의 적용
 - 각 서비스내에 도출된 핵심 Aggregate Root 객체를 Entity 로 선언하였다. (Order.java)</br>
@@ -211,53 +210,52 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 - 적용 후 REST API 의 테스트</br>
 
   - 주문 등록</br>
-    ![image](https://user-images.githubusercontent.com/87114545/131760575-1d20bbe2-6ff5-461d-8f3a-bfa9b68145dd.png)
+    ![image](https://user-images.githubusercontent.com/87114545/131857282-9fcb1eb2-1ef1-48aa-b30d-d12c2b801c3a.png)
 
   - 주문 확인</br>
     : orderId = 1인 주문 생성 </br> 
-    ![image](https://user-images.githubusercontent.com/87114545/131760660-5d5b1e29-604a-41e6-829e-19ad5e09a813.png)</br>
+    ![image](https://user-images.githubusercontent.com/87114545/131857318-96c24337-8872-45d4-9a3a-5012df49bfc7.png)</br>
 
   - 결제 승인 확인</br>
     : orderlId = 1에 대한 paymentId = 1인 payment의 status 확인 </br> 
-    ![image](https://user-images.githubusercontent.com/87114545/131760703-ad743a79-8b4b-46af-a0f5-6f98e06c4063.png)</br> 
+    ![image](https://user-images.githubusercontent.com/87114545/131857362-e93838a7-daaf-49c1-b444-4c7fec9b87c2.png)</br> 
 
   - 배송 시작 확인</br>
     : paymentId = 1에 대한  delivery 조회 됨</br>
-    ![image](https://user-images.githubusercontent.com/87114545/131760723-afc47200-c068-452f-acf1-b458102e4356.png)</br>
+    ![image](https://user-images.githubusercontent.com/87114545/131857387-0744064a-3569-4455-9260-9958990578bb.png)</br>
 
-  - 주문 취소</br> 
-    ![image](https://user-images.githubusercontent.com/87048624/130167484-d6733c1b-153a-4a55-a1ae-fd2b38209187.png)</br>
-   
-  - 주문 취소 확인</br>  
-    ![image](https://user-images.githubusercontent.com/87048624/130167567-033529f9-6d59-428d-84c0-63974b32fae8.png)</br>
+  - 주문/배송 현황 확인(MyPage)</br> 
+    ![image](https://user-images.githubusercontent.com/87114545/131857696-c42efbb8-a063-4be2-9e9c-7d53a0bda94b.png)</br>
 
-  - 결제 취소 확인</br>  
-    ![image](https://user-images.githubusercontent.com/87048624/130167646-c01d6969-5728-4493-a681-354363bd8dc4.png)</br>
+  - 주문 취소 </br> 
+    ![image](https://user-images.githubusercontent.com/87114545/131858066-e968453d-60c7-49b1-a3d8-73af4e54aa81.png)</br>
 
-  - 배송 취소 확인</br>  
-    ![image](https://user-images.githubusercontent.com/87048624/130167750-1d6ab2f7-d563-420d-af96-1cc62417a7dc.png)</br>
+  - 주문 취소 확인 </br> 
+    ![image](https://user-images.githubusercontent.com/87114545/131858439-0e8ac81d-3e37-4865-9f2c-3c7eb683835f.png)</br>
+
+  - 결제 취소 확인 </br> 
+    ![image](https://user-images.githubusercontent.com/87114545/131858467-b47bdd8d-f73a-47c6-9b53-db8d84b337e8.png)</br>
+
+  - 배송 취소 확인 </br> 
+    ![image](https://user-images.githubusercontent.com/87114545/131858493-63ba1a92-b742-4d1c-b3e2-2ed037d77a18.png)</br>
 
 
 ### 비동기식 호출과 Eventual Consistency
 - OrderPlaced -> PaymentApproved -> DeliveryStarted 순서로 Event가 처리됨</br>
- ![image](https://user-images.githubusercontent.com/87048624/130095576-6a139cd6-67c3-4667-ab7d-a4a961114e10.png) </br>
-
-- 결과적 일치 확인</br>
- ![image](https://user-images.githubusercontent.com/87048624/130171502-462a0563-cc65-428a-a22d-4be469e0fae9.png)</br>
+ ![image](https://user-images.githubusercontent.com/87114545/131859059-3404717e-4a10-4fef-af59-df076de23b00.png)</br>
 
 
 ### CQRS
   - My Page에서 주문/결제/배송 상태 확인 (CQRS)</br>    
-    : mypage 조회시OrderPlaced 이벤트까지만 수신내역 확인, 모든 이벤트 수신내역 확인</br>      
-     ![image](https://user-images.githubusercontent.com/87048624/130083651-18549595-ec82-4bca-a5e7-3d23952872dc.png)</br>
+  ![image](https://user-images.githubusercontent.com/87114545/131859567-d211b0fa-e8b0-4947-a6d2-51937e632683.png)</br>
 
 
 ### Correlation 
   - OrderCanceled 이벤트 발생</br> 
-  ![image](https://user-images.githubusercontent.com/87048624/130172126-56738d8c-2968-4728-a32c-88af68eb7416.png)</br> 
+  ![image](https://user-images.githubusercontent.com/87114545/131859757-1cfb102d-1a11-4c0e-825d-746912963520.png)</br> 
 
   - CorrelationId로 찾아서 삭제</br> 
-  ![image](https://user-images.githubusercontent.com/87048624/130172215-6c23c8a6-a009-419c-873e-83ea556fd2c6.png)</br> 
+  ![image](https://user-images.githubusercontent.com/87114545/131860203-4129c1a1-1f49-4672-910a-61bf0951c011.png)</br> 
 
 
 ### 동기식 호출
@@ -279,16 +277,16 @@ api:
     payment: http://localhost:8082
 ```
 - 동기식 호출 후 payment서비스 처리결과</br> 
-  ![image](https://user-images.githubusercontent.com/87048624/130095444-62dfc940-cecf-4791-907e-bd0136ce1b25.png)</br>
+  ![image](https://user-images.githubusercontent.com/87114545/131860656-f1a18f00-85cd-435b-8e74-006f1c28fb7b.png)</br>
 
 
 ### GateWay
   - API GateWay를 통하여 마이크로 서비스들의 진입점을 통일할 수 있도록 구현하였다. </br>
     - 서비스 직접 조회</br>
-   ![image](https://user-images.githubusercontent.com/87048624/130100882-d053b088-2e49-476b-8521-fbe29367e739.png)</br>
+   ![image](https://user-images.githubusercontent.com/87114545/131860706-507c3413-04b5-4f03-8e65-c79d1bd50cbf.png)</br>
    
     - Gateway를 경유해서 조회</br>
-   ![image](https://user-images.githubusercontent.com/87048624/130166073-6e213177-ceb8-44fa-9b12-8538bfd9b754.png)</br>
+   ![image](https://user-images.githubusercontent.com/87114545/131860725-1f310327-0fd2-4d9c-a620-e7fae10ab2aa.png)</br>
 
 
 ### 서킷 브레이커
@@ -354,14 +352,10 @@ api:
 
 
 ## 운영
-### Deploy, Pipeline 설정
+### Pipeline
 - 각 구현체들은 각자의 source repository 에 구성되었고, 사용한 CI/CD 플랫폼은 aws codebuild를 사용하였으며,</br>
   pipeline build script 는 각 프로젝트 폴더 이하에 buildspec.yml 에 포함되었다.</br>
-  ![image](https://user-images.githubusercontent.com/87048633/130006493-f79b40dc-242d-4684-95eb-e4a305abb6ef.png)
-  ![image](https://user-images.githubusercontent.com/87048633/130006762-19c4648c-0e27-461b-897f-59aeeddb2bc6.png)
-  ![image](https://user-images.githubusercontent.com/87048633/130007397-522fdd2e-cd61-4364-86b4-276afff0248d.png)
-  ![image](https://user-images.githubusercontent.com/87048633/130007020-ce217d04-844f-423b-8bae-b141bc377ec8.png)</br>
-  
+  ![image](https://user-images.githubusercontent.com/87114545/131862693-11d97b61-9946-43f4-b617-9fbe7c7b1fe3.png)</br>
 
 
 ### HPA (Horizontal Pod Autoscaler)
