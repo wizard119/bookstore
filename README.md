@@ -242,12 +242,12 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 
 ### 비동기식 호출과 Eventual Consistency
 - OrderPlaced -> PaymentApproved -> DeliveryStarted 순서로 Event가 처리됨</br>
- ![image](https://user-images.githubusercontent.com/87114545/131859059-3404717e-4a10-4fef-af59-df076de23b00.png)</br>
+ ![image](https://user-images.githubusercontent.com/87114545/131859059-3404717e-4a10-4fef-af59-df076de23b00.png)</br></br>
 
 
 ### CQRS
   - My Page에서 주문/결제/배송 상태 확인 (CQRS)</br>    
-  ![image](https://user-images.githubusercontent.com/87114545/131859567-d211b0fa-e8b0-4947-a6d2-51937e632683.png)</br>
+  ![image](https://user-images.githubusercontent.com/87114545/131859567-d211b0fa-e8b0-4947-a6d2-51937e632683.png)</br></br>
 
 
 ### Correlation 
