@@ -255,7 +255,7 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
   ![image](https://user-images.githubusercontent.com/87114545/131859757-1cfb102d-1a11-4c0e-825d-746912963520.png)</br> 
 
   - CorrelationId로 찾아서 삭제</br> 
-  ![image](https://user-images.githubusercontent.com/87114545/131860203-4129c1a1-1f49-4672-910a-61bf0951c011.png)</br> 
+  ![image](https://user-images.githubusercontent.com/87114545/131860203-4129c1a1-1f49-4672-910a-61bf0951c011.png)</br></br>  
 
 
 ### 동기식 호출
@@ -342,7 +342,7 @@ api:
 - pom.xml 파일 내 DB 정보 변경 및 재기동</br>
  ![image](https://user-images.githubusercontent.com/87114545/131755289-8d0fbbd5-e297-470a-8b0b-5c0d8e2664c4.png)</br>
 - OrderPlaced 정상 처리</br>
- ![image](https://user-images.githubusercontent.com/87114545/131864258-55afcdeb-757f-4d72-b24f-1e64c62c3310.png)</br>
+ ![image](https://user-images.githubusercontent.com/87114545/131864258-55afcdeb-757f-4d72-b24f-1e64c62c3310.png)</br></br>
 
 
 ## 운영
