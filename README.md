@@ -277,7 +277,7 @@ api:
     payment: http://localhost:8082
 ```
 - 동기식 호출 후 payment서비스 처리결과</br> 
-  ![image](https://user-images.githubusercontent.com/87114545/131860656-f1a18f00-85cd-435b-8e74-006f1c28fb7b.png)</br>
+  ![image](https://user-images.githubusercontent.com/87114545/131860656-f1a18f00-85cd-435b-8e74-006f1c28fb7b.png)</br></br>
 
 
 ### GateWay
@@ -286,7 +286,7 @@ api:
    ![image](https://user-images.githubusercontent.com/87114545/131860706-507c3413-04b5-4f03-8e65-c79d1bd50cbf.png)</br>
    
     - Gateway를 경유해서 조회</br>
-   ![image](https://user-images.githubusercontent.com/87114545/131860725-1f310327-0fd2-4d9c-a620-e7fae10ab2aa.png)</br>
+   ![image](https://user-images.githubusercontent.com/87114545/131860725-1f310327-0fd2-4d9c-a620-e7fae10ab2aa.png)</br></br>
 
 
 ### 서킷 브레이커
@@ -341,21 +341,15 @@ api:
 
 - pom.xml 파일 내 DB 정보 변경 및 재기동</br>
  ![image](https://user-images.githubusercontent.com/87114545/131755289-8d0fbbd5-e297-470a-8b0b-5c0d8e2664c4.png)</br>
-- rental 서비스 재기동 후 DB에 데이터 없는 상태</br>
- ![image](https://user-images.githubusercontent.com/87048624/130172977-b3fc6202-4f63-4345-9156-d6d579aab07d.png)</br>
 - OrderPlaced 정상 처리</br>
- ![image](https://user-images.githubusercontent.com/87048624/130173106-ba3f9f19-7be4-4d9a-b192-7ba4fb433433.png)</br>
-- Pub/Sub 결과도 정상</br>
- ![image](https://user-images.githubusercontent.com/87048624/130173152-57344c97-1f09-4aa6-b133-dc7a1961816f.png)</br>
-
-
+ ![image](https://user-images.githubusercontent.com/87114545/131864258-55afcdeb-757f-4d72-b24f-1e64c62c3310.png)</br>
 
 
 ## 운영
 ### Pipeline
 - 각 구현체들은 각자의 source repository 에 구성되었고, 사용한 CI/CD 플랫폼은 aws codebuild를 사용하였으며,</br>
-  pipeline build script 는 각 프로젝트 폴더 이하에 buildspec.yml 에 포함되었다.</br>
-  ![image](https://user-images.githubusercontent.com/87114545/131862693-11d97b61-9946-43f4-b617-9fbe7c7b1fe3.png)</br>
+  pipeline build script 는 각 프로젝트 폴더 이하에 buildspec.yml 에 포함되었다.</br></br>
+ ![image](https://user-images.githubusercontent.com/87114545/131862693-11d97b61-9946-43f4-b617-9fbe7c7b1fe3.png)</br>
 
 
 ### HPA (Horizontal Pod Autoscaler)
