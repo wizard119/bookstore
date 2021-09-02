@@ -211,19 +211,19 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 - 적용 후 REST API 의 테스트</br>
 
   - 주문 등록</br>
-    ![image](https://user-images.githubusercontent.com/87048624/130166446-f4f4696d-719c-434b-8793-e41a801e051b.png)</br>
+    ![image](https://user-images.githubusercontent.com/87114545/131760575-1d20bbe2-6ff5-461d-8f3a-bfa9b68145dd.png)
 
   - 주문 확인</br>
     : orderId = 1인 주문 생성 </br> 
-    ![image](https://user-images.githubusercontent.com/87048624/130166720-4ecceef4-3974-4369-b731-ed5e233438aa.png)</br>
+    ![image](https://user-images.githubusercontent.com/87114545/131760660-5d5b1e29-604a-41e6-829e-19ad5e09a813.png)</br>
 
   - 결제 승인 확인</br>
     : orderlId = 1에 대한 paymentId = 1인 payment의 status 확인 </br> 
-    ![image](https://user-images.githubusercontent.com/87048624/130166870-aba9ade8-9b45-4b68-998f-4cd942b3e415.png)</br> 
+    ![image](https://user-images.githubusercontent.com/87114545/131760703-ad743a79-8b4b-46af-a0f5-6f98e06c4063.png)</br> 
 
   - 배송 시작 확인</br>
     : paymentId = 1에 대한  delivery 조회 됨</br>
-    ![image](https://user-images.githubusercontent.com/87048624/130167028-d6d5b306-a48d-40da-bf8f-a079b3cc0859.png)</br>
+    ![image](https://user-images.githubusercontent.com/87114545/131760723-afc47200-c068-452f-acf1-b458102e4356.png)</br>
 
   - 주문 취소</br> 
     ![image](https://user-images.githubusercontent.com/87048624/130167484-d6733c1b-153a-4a55-a1ae-fd2b38209187.png)</br>
@@ -342,7 +342,7 @@ api:
 
 
 - pom.xml 파일 내 DB 정보 변경 및 재기동</br>
-![image](https://user-images.githubusercontent.com/87048624/130165475-6efe2537-9941-4e0a-a689-a6de60a8ee67.png)</br>
+ ![image](https://user-images.githubusercontent.com/87114545/131755289-8d0fbbd5-e297-470a-8b0b-5c0d8e2664c4.png)</br>
 - rental 서비스 재기동 후 DB에 데이터 없는 상태</br>
  ![image](https://user-images.githubusercontent.com/87048624/130172977-b3fc6202-4f63-4345-9156-d6d579aab07d.png)</br>
 - OrderPlaced 정상 처리</br>
