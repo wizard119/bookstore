@@ -417,9 +417,8 @@ api:
           periodSeconds: 5
 ```
 
-  - 해당 pod가 재시작하는걸 확인한다.   
-    ![image](https://user-images.githubusercontent.com/87048624/130086524-d479788b-1023-4a95-906d-dad1a9cef1e5.png) 
-    ![image](https://user-images.githubusercontent.com/87048624/130086552-2c59944d-6f71-4332-8c82-1ce5eff50a85.png)</br>
+  - 해당 pod의 재시작 횟수가 증가
+    ![image](https://user-images.githubusercontent.com/87114545/131925763-02ee3fbd-d309-4fc0-81f7-aaa69fd123cd.png)</br>
 
 ### ConfigMap
  - 변경 가능성이 있는 설정을 ConfigMap을 사용하여 관리
