@@ -443,20 +443,20 @@ api:
     
     api:
       url:
-        payment: ${configurl}
+        payment: ${config_url}
 ```
  - ConfigMap 정의 (Order서비스의 buildspec.yml)</br>
 ```java 
      env:
-       - name: port-list     
+       - name: bookstore-cm
          valueFrom:          
            configMapKeyRef:  
-             name: bookstore-cm 
+             name: bookstore-cm
              key: config_url     
 ```
  - configMap 생성
   ```
-   kubectl apply configmap bookstore-cm --from-literal=configurl=http://localhost:8082
+   kubectl apply configmap bookstore-cm --from-literal=config_url=http://localhost:8082
   ``` 
  - 생성전 배포후 order pod 수행안함 </br>
   ![image](https://user-images.githubusercontent.com/87048624/130183020-1a521507-f678-4ba3-b0ee-4d21c0edeeed.png)</br>
