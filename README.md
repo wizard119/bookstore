@@ -417,7 +417,7 @@ api:
           periodSeconds: 5
 ```
 
-  - 해당 pod의 재시작 횟수가 증가
+  - 해당 pod의 재시작 횟수 증가 확인
     ![image](https://user-images.githubusercontent.com/87114545/131925763-02ee3fbd-d309-4fc0-81f7-aaa69fd123cd.png)</br>
 
 ### ConfigMap
