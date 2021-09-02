@@ -417,7 +417,7 @@ api:
           periodSeconds: 5
 ```
 
-  - 해당 pod의 재시작 횟수 증가 확인
+  - 해당 pod의 재시작 횟수 증가 확인</br>
     ![image](https://user-images.githubusercontent.com/87114545/131925763-02ee3fbd-d309-4fc0-81f7-aaa69fd123cd.png)</br>
 
 ### ConfigMap
@@ -426,7 +426,7 @@ api:
 ```java
     # api:
     #   url:
-    #     payment: http://localhost:8082
+    #     payment: http://user15-payment:8080
     
     api:
       url:
@@ -445,8 +445,6 @@ api:
   ```
    kubectl apply configmap bookstore-cm --from-literal=config_url=http://localhost:8082
   ``` 
- - 생성전 배포후 order pod 수행안함 </br>
-  ![image](https://user-images.githubusercontent.com/87048624/130183020-1a521507-f678-4ba3-b0ee-4d21c0edeeed.png)</br>
- - order pod 수행</br>
+ - 생성 후 서비스 정상 수행 확인</br>
   ![image](https://user-images.githubusercontent.com/87048624/130183035-b4872b21-8678-4757-84b4-416e1736f19e.png)</br>
 
