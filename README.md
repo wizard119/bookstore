@@ -418,7 +418,7 @@ api:
 ```
 
   - 해당 pod의 재시작 횟수 증가 확인</br>
-    ![image](https://user-images.githubusercontent.com/87114545/131929579-c07704cb-2495-441d-8a4f-cee804f66f04.png)</br>
+    ![image](https://user-images.githubusercontent.com/87114545/131930005-327b4413-2244-434d-8760-19c37a54e4f6.png)</br>
 
 ### ConfigMap
  - 변경 가능성이 있는 설정을 ConfigMap을 사용하여 관리
