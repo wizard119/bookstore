@@ -237,7 +237,7 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
     ![image](https://user-images.githubusercontent.com/87114545/131858467-b47bdd8d-f73a-47c6-9b53-db8d84b337e8.png)</br>
 
   - 배송 취소 확인 </br> 
-    ![image](https://user-images.githubusercontent.com/87114545/131858493-63ba1a92-b742-4d1c-b3e2-2ed037d77a18.png)</br>
+    ![image](https://user-images.githubusercontent.com/87114545/131858493-63ba1a92-b742-4d1c-b3e2-2ed037d77a18.png)</br></br>
 
 
 ### 비동기식 호출과 Eventual Consistency
