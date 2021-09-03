@@ -399,7 +399,7 @@ api:
  
 ### Self-Healing (Liveness probe)
 - Liveness probe를 통해 Pod의 상태를 체크하다가, Pod의 상태가 비정상인경우 재시작한다. 
-- Liveness probe 관련 설정 (order서비스의 buildspec.yml) </br>
+- Liveness probe 관련 설정 (payment서비스의 buildspec.yml) </br>
   /tmp/test 파일이 존재하는지 주기적 확인 후 비정상(파일 미존재) 판단시 자동으로 재시작)</br>
     
 ```java    
