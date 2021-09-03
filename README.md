@@ -446,8 +446,7 @@ api:
              name: bookstore-cm
              key: config_url     
 ```
- - configMap 생성
-  ```
-   kubectl apply configmap bookstore-cm --from-literal=config_url=http://localhost:8082
-  ``` 
+ - configMap 생성 및 확인 </br>
+ ![image](https://user-images.githubusercontent.com/87114545/131945794-9a32367a-618b-4b7f-9935-441d64291e2a.png)</br></br>
+ 
  - 생성 후 서비스 정상 수행 확인 => 서비스 비정상 동작으로 확인 못함..</br>
