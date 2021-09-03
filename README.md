@@ -362,21 +362,19 @@ api:
               cpu: 200m
 ```
 
-- 오토스케일링 설정 (해당 deployment 컨테이너의 최대값/최소값 설정)
-```
-  kubectl autoscale deployment user5-rental --cpu-percent=50 --min=1 --max=10   
-``` 
-- 워크로드를 110명, 30초 동안 부하를 걸어준다.</br>
- ![image](https://user-images.githubusercontent.com/87048624/130164937-5be87dce-e3dd-4f3e-b1cd-aa02610c13de.png)</br>
- 
-- AutoScale이 어떻게 되고 있는지 모니터링을 걸어둔다.</br>
- ![image](https://user-images.githubusercontent.com/87048633/130032165-431e8c28-1d82-4a9a-9391-ddda9cae46a7.png)</br>
-- 어느정도 시간이 흐른 후 (약 30초) 스케일 아웃이 벌어지는 것을 확인할 수 있다. </br>
- ![image](https://user-images.githubusercontent.com/87048633/130032517-f53b5f92-acf0-4e68-908e-f60cdc2044ab.png)</br>
- ![image](https://user-images.githubusercontent.com/87048633/130032462-2dba6d76-6bcf-41f2-a391-936f9aa1e5d0.png)</br>
-- siege 의 로그를 보아도 전체적인 성공률이 높아진 것을 확인 할 수 있다.</br>
- ![image](https://user-images.githubusercontent.com/87048633/130032321-6b55498c-56d0-40e2-8b46-c83aa66cb951.png)</br>
+- 오토스케일링 설정 (해당 deployment 컨테이너의 최대값/최소값 설정)</br>
+ ![image](https://user-images.githubusercontent.com/87114545/131937138-cfe201b7-fed2-49ae-9fdb-93fda3a4044a.png)</br>
 
+- 워크로드를 100명, 30초 동안 부하를 걸어준다.</br>
+```
+siege -c100 -t30S -v http://user15-payment:80
+```
+
+- 부하 테스트 수행전 </br>
+ ![image](https://user-images.githubusercontent.com/87114545/131937421-cf8a9abc-648a-42ab-bac5-fc88d935db6e.png)</br>
+- 일정시간 경과후 스케일 아웃 확인 (payment POD 증가)</br>
+ ![image](https://user-images.githubusercontent.com/87114545/131937468-b7a5b527-c6be-463a-9520-8ee1b2cad703.png)</br>
+ 
 
 ### 무정지 재배포
 - readiness probe를 통해 이후 서비스가 활성 상태가 되면 유입을 진행시킨다.</br> 
