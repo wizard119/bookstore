@@ -400,7 +400,7 @@ api:
 ### Self-Healing (Liveness probe)
 - Liveness probe를 통해 Pod의 상태를 체크하다가, Pod의 상태가 비정상인경우 재시작한다. 
 - Liveness probe 관련 설정 (order서비스의 buildspec.yml) </br>
-  /tmp/healthy 파일이 존재하는지 주기적 확인 후 비정상(파일 미존재) 판단시 자동으로 재시작)</br>
+  /tmp/test 파일이 존재하는지 주기적 확인 후 비정상(파일 미존재) 판단시 자동으로 재시작)</br>
     
 ```java    
     containers:
@@ -411,20 +411,19 @@ api:
         args:           
           - /bin/sh     
           - -c          
-          - touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600
+          - touch /tmp/test; sleep 30; rm -rf /tmp/healthy; sleep 600
         ...  
         ...  
         livenessProbe:
           exec: 
             command: 
             - cat    
-            - /tmp/healthy
+            - /tmp/test
           initialDelaySeconds: 5
           periodSeconds: 5
 ```
-
-  - 해당 pod의 재시작 횟수 증가 확인</br>
-    ![image](https://user-images.githubusercontent.com/87114545/131930005-327b4413-2244-434d-8760-19c37a54e4f6.png)</br>
+- 해당 pod의 재시작 횟수 증가 확인</br>
+    ![image](https://user-images.githubusercontent.com/87114545/131945238-36c24956-baea-4aea-924c-c95214d670c9.png)</br>
 
 ### ConfigMap
  - 변경 가능성이 있는 설정을 ConfigMap을 사용하여 관리
@@ -451,6 +450,4 @@ api:
   ```
    kubectl apply configmap bookstore-cm --from-literal=config_url=http://localhost:8082
   ``` 
- - 생성 후 서비스 정상 수행 확인</br>
-  ![image](https://user-images.githubusercontent.com/87048624/130183035-b4872b21-8678-4757-84b4-416e1736f19e.png)</br>
-
+ - 생성 후 서비스 정상 수행 확인 => 서비스 비정상 동작으로 확인 못함..</br>
