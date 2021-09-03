@@ -382,7 +382,7 @@ api:
 - siege 실행 중 readiness가 없는 v2 배포 완료 후 availability 하락 확인</br>
   ![image](https://user-images.githubusercontent.com/87114545/131941708-8a5c72ab-097d-4e0b-9ace-8e80964d71b2.png) </br> 
 
-- readiness 설정 주석 처리후 v3 배포</br> 
+- readiness 설정 후 v3 배포</br> 
 - readiness 옵션 존재 시 동일 조건 부하에서 Availablility 100% 확인</br>
  ![image](https://user-images.githubusercontent.com/87114545/131944065-02497158-1ce8-4798-adec-11f35cc36054.png)</br>
 
