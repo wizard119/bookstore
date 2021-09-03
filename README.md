@@ -366,26 +366,34 @@ api:
  ![image](https://user-images.githubusercontent.com/87114545/131937138-cfe201b7-fed2-49ae-9fdb-93fda3a4044a.png)</br>
 
 - 워크로드를 100명, 30초 동안 부하를 걸어준다.</br>
-```
-siege -c100 -t30S -v http://user15-payment:80
-```
+ ![image](https://user-images.githubusercontent.com/87114545/131938005-e9ea92a9-3c8d-4f31-97dd-25f4d6b2edba.png)</br>
 
 - 부하 테스트 수행전 </br>
  ![image](https://user-images.githubusercontent.com/87114545/131937421-cf8a9abc-648a-42ab-bac5-fc88d935db6e.png)</br>
-- 일정시간 경과후 스케일 아웃 확인 (payment POD 증가)</br>
- ![image](https://user-images.githubusercontent.com/87114545/131937468-b7a5b527-c6be-463a-9520-8ee1b2cad703.png)</br>
+
+- 일정시간 경과후 스케일 아웃 확인 (payment Pod 증가)</br>
+ ![image](https://user-images.githubusercontent.com/87114545/131937637-ae49e4ea-a323-45bb-b6e5-8281f0ad8c43.png)</br>
  
 
-### 무정지 재배포
-- readiness probe를 통해 이후 서비스가 활성 상태가 되면 유입을 진행시킨다.</br> 
-- 주석처리하여 v2 배포</br> 
- ![image](https://user-images.githubusercontent.com/87048624/130180233-576fdee7-ab33-488f-a092-7bd29876b542.png)</br>
-- siege -c10 -t150S -v http://user5-rental 부하 후 readiness 주석 삭제 후 배포 하여 Availablility 100% 이하 확인</br>
- ![image](https://user-images.githubusercontent.com/87048624/130177311-f7a5638a-2f5a-43e9-8a4e-c54aeb9d7ed8.png) </br> 
-- 주석해제 후 v3 배포</br> 
- ![image](https://user-images.githubusercontent.com/87048624/130177611-4330cb64-4ddb-4dad-9373-dc5fa9c257f3.png)</br>
-- siege -c10 -t150S -v http://user5-rental 부하(동일조건)  readiness 옵션 존재 시 Availablility 100% 확인</br>
- ![image](https://user-images.githubusercontent.com/87048624/130177836-c04e4900-96c3-4079-993f-da53dce775c2.png)</br>
+### 무정지 재배포 (Readiness Probe)
+- readiness 설정이 있는 payment v1 상태에서 siege 실행 (siege -c10 -t600S -v http://user5-payment)</br> 
+- readiness 설정 주석 처리후 v2 배포</br> 
+```java    
+      #readinessProbe:
+      #  httpGet:
+      #    path: /actuator/health
+      #    port: 8080
+      #  initialDelaySeconds: 10
+      #  timeoutSeconds: 2
+      #  periodSeconds: 5
+      #  failureThreshold: 10
+```
+- siege 실행 중 readiness가 없는 v2 배포 완료 후 availability 하락 확인</br>
+  ![image](https://user-images.githubusercontent.com/87114545/131941708-8a5c72ab-097d-4e0b-9ace-8e80964d71b2.png) </br> 
+
+- readiness 설정 주석 처리후 v3 배포</br> 
+- readiness 옵션 존재 시 동일 조건 부하에서 Availablility 100% 확인</br>
+ ![image](https://user-images.githubusercontent.com/87114545/131944065-02497158-1ce8-4798-adec-11f35cc36054.png)</br>
 
  
  
