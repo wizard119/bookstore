@@ -325,15 +325,6 @@ api:
     }
 ```    
 
-- 서킷 브레이크 적용전
-
-  ![image](https://user-images.githubusercontent.com/87048624/130067551-49d8804e-af47-4913-a727-27ec6d01945b.png)
-
-- 서킷 브레이크 적용후 
-
-  ![image](https://user-images.githubusercontent.com/87048624/130067583-be97a8b1-6080-4145-a681-f87b476f58d3.png)</br>
-
-
 ### Polyglot Persistent / Polyglot Programming
 - Polyglot Persistent 조건을 만족하기 위해 기존 h2 DB를 hsqldb로 변경하여 동작시킨다. (Order서비스의 pom.xml)</br>
 ![image](https://user-images.githubusercontent.com/87114545/131254432-a3072141-ecba-466a-977c-c88acef2bf76.png)
