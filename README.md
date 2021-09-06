@@ -445,5 +445,5 @@ api:
              key: config_url     
 ```
  - configMap 생성 및 확인 </br>
- ![image](https://user-images.githubusercontent.com/87114545/131945794-9a32367a-618b-4b7f-9935-441d64291e2a.png)</br>
+ ![image](https://user-images.githubusercontent.com/87114545/131945794-9a32367a-618b-4b7f-9935-441d64291e2a.png)</br> 
  
