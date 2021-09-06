@@ -370,7 +370,7 @@ api:
  ![image](https://user-images.githubusercontent.com/87114545/131937421-cf8a9abc-648a-42ab-bac5-fc88d935db6e.png)</br>
 
 - 일정시간 경과후 스케일 아웃 확인 (payment Pod 증가)</br>
- ![image](https://user-images.githubusercontent.com/87114545/131937637-ae49e4ea-a323-45bb-b6e5-8281f0ad8c43.png)</br>
+ ![image](https://user-images.githubusercontent.com/87114545/131937637-ae49e4ea-a323-45bb-b6e5-8281f0ad8c43.png)</br>/br>
  
 
 ### 무정지 재배포 (Readiness Probe)
@@ -391,7 +391,7 @@ api:
 
 - readiness 설정 후 v3 배포</br> 
 - readiness 옵션 존재 시 동일 조건 부하에서 Availablility 100% 확인</br>
- ![image](https://user-images.githubusercontent.com/87114545/131944065-02497158-1ce8-4798-adec-11f35cc36054.png)</br>
+ ![image](https://user-images.githubusercontent.com/87114545/131944065-02497158-1ce8-4798-adec-11f35cc36054.png)</br>/br>
 
  
  
@@ -421,7 +421,7 @@ api:
           periodSeconds: 5
 ```
 - 해당 pod의 재시작 횟수 증가 확인</br>
-    ![image](https://user-images.githubusercontent.com/87114545/131945238-36c24956-baea-4aea-924c-c95214d670c9.png)</br>
+    ![image](https://user-images.githubusercontent.com/87114545/131945238-36c24956-baea-4aea-924c-c95214d670c9.png)</br>/br>
 
 ### ConfigMap
  - 변경 가능성이 있는 설정을 ConfigMap을 사용하여 관리
