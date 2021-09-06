@@ -323,7 +323,14 @@ api:
         BeanUtils.copyProperties(this, paymentApproved);
         paymentApproved.publishAfterCommit();
     }
-```    
+```
+
+- 서킷 브레이크 적용전</br>
+  ![image](https://user-images.githubusercontent.com/87048624/130067551-49d8804e-af47-4913-a727-27ec6d01945b.png)</br>
+
+- 서킷 브레이크 적용후</br>
+  ![image](https://user-images.githubusercontent.com/87048624/130067583-be97a8b1-6080-4145-a681-f87b476f58d3.png)</br></br>
+
 
 ### Polyglot Persistent / Polyglot Programming
 - Polyglot Persistent 조건을 만족하기 위해 기존 h2 DB를 hsqldb로 변경하여 동작시킨다. (Order서비스의 pom.xml)</br>
