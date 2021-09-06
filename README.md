@@ -246,7 +246,7 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 
 
 ### CQRS
-  - My Page에서 주문/결제/배송 상태 확인 (CQRS)</br>    
+  - My Page에서 주문/결제/배송 상태 확인 (CQRS)</br>
   ![image](https://user-images.githubusercontent.com/87114545/131859567-d211b0fa-e8b0-4947-a6d2-51937e632683.png)</br></br>
 
 
